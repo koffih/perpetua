@@ -1,0 +1,17 @@
+# Perpetua: one unattended Claude Code session for the project named by the instance.
+# Rendered by `perpetua enable`; @LIBEXECDIR@ is replaced with the installed path.
+[Unit]
+Description=Perpetua autonomous session for %i
+Documentation=https://github.com/koffih/perpetua
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=@LIBEXECDIR@/session %i
+# The runner enforces MAX_SESSION itself; systemd must never cut it short.
+TimeoutStartSec=infinity
+KillMode=mixed
+Nice=5
+IOSchedulingClass=best-effort
+IOSchedulingPriority=6

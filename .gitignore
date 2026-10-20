@@ -1,0 +1,11 @@
+# Documentation build
+/site/
+
+# Release archives
+/dist/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ruff_cache/

@@ -1,0 +1,7 @@
+# ShellCheck configuration for editors and `make lint`.
+# Perpetua is written for Bash only, including the bats test files.
+shell=bash
+
+# Follow `source` directives relative to the sourcing script.
+source-path=SCRIPTDIR
+external-sources=true

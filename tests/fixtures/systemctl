@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Fake systemctl for the test suite: records every call, succeeds.
+echo "$*" >> "${FAKE_SYSTEMCTL_LOG:-/dev/null}"
+case "$*" in
+	*is-enabled*|*is-active*) exit 1 ;;
+esac
+exit 0

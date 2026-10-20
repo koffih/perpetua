@@ -1,0 +1,14 @@
+# Normalise line endings: every file in the repository uses LF.
+* text=auto eol=lf
+
+# Binary files.
+*.png binary
+*.jpg binary
+*.ico binary
+
+# Kept out of `git archive` source exports.
+/.github export-ignore
+
+# Language statistics.
+/docs/** linguist-documentation
+*.bats linguist-language=Shell

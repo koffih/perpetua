@@ -1,0 +1,120 @@
+site_name: Perpetua
+site_description: Continuous, unattended Claude Code sessions on a systemd cadence, with operator-grade guardrails.
+site_url: https://koffih.github.io/perpetua/
+site_author: The Perpetua Authors
+repo_url: https://github.com/koffih/perpetua
+repo_name: koffih/perpetua
+edit_uri: edit/main/docs/
+copyright: Copyright 2026 The Perpetua Authors. Apache-2.0.
+
+theme:
+  name: material
+  logo: assets/logo.svg
+  favicon: assets/logo.svg
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Switch to system preference
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - toc.follow
+
+extra_css:
+  - stylesheets/extra.css
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/koffih/perpetua
+      name: Perpetua on GitHub
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - def_list
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path: ["."]
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+nav:
+  - Home: index.md
+  - Getting started:
+      - getting-started/installation.md
+      - getting-started/quickstart.md
+  - Concepts:
+      - concepts/architecture.md
+      - concepts/session-lifecycle.md
+      - concepts/guardrails.md
+  - Guides:
+      - guides/writing-a-directive.md
+      - guides/operating.md
+      - guides/notifications.md
+      - guides/multiple-projects.md
+      - guides/wsl.md
+  - Reference:
+      - reference/cli.md
+      - reference/configuration.md
+      - reference/state-and-files.md
+      - reference/runner-log.md
+      - reference/systemd.md
+  - Security:
+      - security/threat-model.md
+  - Architecture decisions:
+      - adr/index.md
+      - adr/0001-fresh-context-per-session.md
+      - adr/0002-systemd-user-timers.md
+      - adr/0003-subscription-auth.md
+      - adr/0004-operator-presence-yield.md
+      - adr/0005-directive-as-system-prompt.md
+      - adr/0006-fail-closed-gates.md
+  - FAQ: faq.md
+  - Changelog: changelog.md

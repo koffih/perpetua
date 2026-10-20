@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 320" width="1280" height="320" role="img" aria-label="Perpetua: continuous autonomous engineering for Claude Code">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7C5CFF"/>
+      <stop offset="1" stop-color="#1FD1B9"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#E7E9F2" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="320" rx="20" fill="#FFFFFF"/>
+  <rect width="1280" height="320" rx="20" fill="url(#grid)" opacity="0.6"/>
+  <g transform="translate(110 128) scale(3)">
+    <path d="M14 32c0-6 4.5-10 10-10 8 0 12 20 20 20 5.5 0 10-4 10-10s-4.5-10-10-10c-8 0-12 20-20 20-5.5 0-10-4-10-10z"
+          fill="none" stroke="url(#g)" stroke-width="5" stroke-linecap="round" transform="translate(-14 -22)"/>
+    <circle cx="30" cy="0" r="3.2" fill="#1FD1B9"/>
+  </g>
+  <text x="300" y="150" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="68" font-weight="700" fill="#0B0D17" letter-spacing="-1.5">Perpetua</text>
+  <text x="302" y="198" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="26" fill="#5A6078">Continuous autonomous engineering for Claude Code.</text>
+  <text x="302" y="240" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="18" fill="url(#g)">guarded sessions  ·  operator-aware  ·  systemd-native  ·  zero daemons</text>
+</svg>

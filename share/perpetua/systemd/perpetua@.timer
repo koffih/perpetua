@@ -1,0 +1,14 @@
+# Perpetua cadence: wake the runner a fixed delay after the previous run ended.
+# Per-project interval: drop-in written by `perpetua enable --interval`.
+[Unit]
+Description=Perpetua cadence for %i
+Documentation=https://github.com/koffih/perpetua
+
+[Timer]
+OnBootSec=10min
+OnUnitInactiveSec=15min
+AccuracySec=30s
+Persistent=false
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,116 @@
+name: Bug report
+description: Perpetua behaves differently from its documentation.
+title: "bug: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a problem. Please search the
+        [existing issues](https://github.com/koffih/perpetua/issues?q=is%3Aissue) first.
+
+        Do not report security vulnerabilities here. Follow the
+        [security policy](https://github.com/koffih/perpetua/security/policy) instead.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened
+      description: A clear and concise description of the problem.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      description: The behaviour you expected, with a link to the relevant documentation if there is one.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: The smallest sequence of commands that reproduces the problem.
+      placeholder: |
+        1. perpetua init ~/src/demo
+        2. perpetua run demo --force
+        3. ...
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Perpetua version
+      description: Output of `perpetua version`.
+      placeholder: perpetua 1.0.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - Linux
+        - WSL 2
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: distribution
+    attributes:
+      label: Distribution and systemd version
+      description: For example the `PRETTY_NAME` from `/etc/os-release` and the first line of `systemctl --version`.
+      placeholder: Ubuntu 24.04.1 LTS, systemd 255
+    validations:
+      required: true
+
+  - type: input
+    id: claude-version
+    attributes:
+      label: Claude Code version
+      description: Output of `claude --version`.
+    validations:
+      required: false
+
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Output of `perpetua doctor`
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: runner-log
+    attributes:
+      label: Runner log excerpt
+      description: |
+        The relevant lines of `perpetua logs <project>`
+        (`~/.local/state/perpetua/<project>/runner.log`), and `last-session.json` if the problem
+        concerns a recorded session. Remove anything you consider private before posting.
+      render: text
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Configuration values you changed from the defaults, or anything else that may help.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched the existing issues and this problem is not reported yet.
+          required: true
+        - label: The logs and configuration above contain no credential, token or private path.
+          required: true

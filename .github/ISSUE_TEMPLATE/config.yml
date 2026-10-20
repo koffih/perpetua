@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://koffih.github.io/perpetua/
+    about: Installation, guides, configuration reference and FAQ.
+  - name: Report a security vulnerability
+    url: https://github.com/koffih/perpetua/security/advisories/new
+    about: Report vulnerabilities privately. Never open a public issue for them.
+  - name: Security policy
+    url: https://github.com/koffih/perpetua/security/policy
+    about: Supported versions, scope and response targets.

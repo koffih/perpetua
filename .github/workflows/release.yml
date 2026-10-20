@@ -1,0 +1,123 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  SHELLCHECK_VERSION: "0.10.0.1"
+  BATS_VERSION: "1.11.0"
+
+jobs:
+  release:
+    name: Publish ${{ github.ref_name }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify the tag matches every version string
+        id: version
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          version=${TAG#v}
+          cli=$(sed -n 's/^readonly VERSION="\(.*\)"$/\1/p' bin/perpetua)
+          runner=$(sed -n 's/^readonly PERPETUA_VERSION="\(.*\)"$/\1/p' libexec/perpetua/session)
+          citation=$(sed -n 's/^version: "\{0,1\}\([^"]*\)"\{0,1\}$/\1/p' CITATION.cff)
+          status=0
+          for pair in "bin/perpetua:$cli" "libexec/perpetua/session:$runner" "CITATION.cff:$citation"; do
+            if [[ ${pair#*:} != "$version" ]]; then
+              echo "::error file=${pair%%:*}::version '${pair#*:}' does not match tag $TAG"
+              status=1
+            fi
+          done
+          if ! grep -q "^## \[$version\] - [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}$" CHANGELOG.md; then
+            echo "::error file=CHANGELOG.md::no dated section for [$version]"
+            status=1
+          fi
+          [[ $status -eq 0 ]] || exit 1
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if [[ $version == *-* ]]; then
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Lint
+        run: |
+          pipx install "shellcheck-py==${SHELLCHECK_VERSION}"
+          make lint
+          pipx run ruff check --target-version py38 libexec
+
+      - name: Test
+        run: make test BATS="npx --yes bats@${BATS_VERSION}"
+
+      - name: Build the archive
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          make dist
+          test -f "dist/perpetua-${VERSION}.tar.gz"
+          (cd dist && sha256sum "perpetua-${VERSION}.tar.gz" > SHA256SUMS)
+          cat dist/SHA256SUMS
+
+      - name: Extract the release notes from CHANGELOG.md
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          awk -v v="$VERSION" '
+            index($0, "## [" v "]") == 1 { found = 1; next }
+            found && (/^## \[/ || /^\[[^]]+\]: /) { exit }
+            found { print }
+          ' CHANGELOG.md | sed -e '/./,$!d' > "$RUNNER_TEMP/notes.md"
+          if ! grep -q '[^[:space:]]' "$RUNNER_TEMP/notes.md"; then
+            echo "::error file=CHANGELOG.md::the [$VERSION] section is empty"
+            exit 1
+          fi
+          {
+            echo
+            echo "Verify the download with \`sha256sum --check SHA256SUMS\` and"
+            echo "\`gh attestation verify perpetua-${VERSION}.tar.gz --repo ${GITHUB_REPOSITORY}\`."
+          } >> "$RUNNER_TEMP/notes.md"
+          cat "$RUNNER_TEMP/notes.md"
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: dist/perpetua-${{ steps.version.outputs.version }}.tar.gz
+
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          VERSION: ${{ steps.version.outputs.version }}
+          PRERELEASE: ${{ steps.version.outputs.prerelease }}
+        run: |
+          flags=()
+          [[ $PRERELEASE == true ]] && flags+=(--prerelease)
+          gh release create "$TAG" \
+            "dist/perpetua-${VERSION}.tar.gz" dist/SHA256SUMS \
+            --title "Perpetua ${VERSION}" \
+            --notes-file "$RUNNER_TEMP/notes.md" \
+            --verify-tag \
+            "${flags[@]}"

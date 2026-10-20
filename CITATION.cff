@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: If you use Perpetua in your work, please cite it using these metadata.
+type: software
+title: Perpetua
+abstract: >-
+  Perpetua runs continuous, unattended Claude Code sessions on a project from a
+  systemd user timer, with admission gates that yield to the operator, back off
+  after usage limits and record every session.
+authors:
+  - alias: koffih
+    website: https://github.com/koffih
+version: "1.0.0"
+date-released: "2026-10-20"
+license: Apache-2.0
+repository-code: https://github.com/koffih/perpetua
+url: https://koffih.github.io/perpetua/
+keywords:
+  - claude-code
+  - autonomous-agents
+  - systemd
+  - automation
+  - cli

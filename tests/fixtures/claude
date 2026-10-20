@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Fake Claude Code for the test suite. Behaviour is driven by FAKE_CLAUDE_MODE.
+printf '%s\n' "$@" > "${FAKE_CLAUDE_ARGS:-/dev/null}"
+pwd > "${FAKE_CLAUDE_CWD:-/dev/null}"
+id=${FAKE_CLAUDE_SESSION:-11111111-2222-3333-4444-555555555555}
+echo '{"type":"system","subtype":"init","session_id":"'"$id"'","model":"claude-test"}'
+case "${FAKE_CLAUDE_MODE:-ok}" in
+	ok) echo '{"type":"result","subtype":"success","is_error":false,"num_turns":7,"total_cost_usd":0.42,"session_id":"'"$id"'","result":"Did task A and task B."}' ;;
+	limit) echo '{"type":"result","is_error":true,"session_id":"'"$id"'","result":"Claude AI usage limit reached|1792500000"}'; exit 1 ;;
+	error) echo 'boom' >&2; exit 3 ;;
+	sleep) sleep 5 ;;
+	reportlimit) echo '{"type":"result","is_error":false,"num_turns":3,"session_id":"'"$id"'","result":"Added the usage limit reached banner."}' ;;
+	toolread)
+		echo '{"type":"user","message":{"content":[{"type":"tool_result","content":"docs: Claude usage limit reached"}]}}'
+		echo '{"type":"result","is_error":false,"num_turns":2,"session_id":"'"$id"'","result":"Read the docs."}' ;;
+esac
+exit 0
