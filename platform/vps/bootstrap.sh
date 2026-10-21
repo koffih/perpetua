@@ -163,7 +163,9 @@ if [[ -n $TOKEN_FILE ]]; then
 	else
 		umask 077
 		tmp_env=$(mktemp)
-		[[ -f $envfile ]] && grep -v '^CLAUDE_CODE_OAUTH_TOKEN=' "$envfile" > "$tmp_env" || true
+		if [[ -f $envfile ]]; then
+			grep -v '^CLAUDE_CODE_OAUTH_TOKEN=' "$envfile" > "$tmp_env" || true
+		fi
 		printf 'CLAUDE_CODE_OAUTH_TOKEN=%s\n' "$token" >> "$tmp_env"
 		install -m 600 -o "$USER_NAME" -g "$USER_NAME" "$tmp_env" "$envfile"
 		rm -f "$tmp_env"
