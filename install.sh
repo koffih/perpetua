@@ -8,6 +8,7 @@
 #   --prefix DIR     install root (default: ~/.local)
 #   --version REF    git tag or branch to install (default: main)
 #   --uninstall      remove Perpetua from the prefix (projects and state are kept)
+#   --no-skill       do not install the bundled autonomous-mode skill
 #   -h, --help       show this help
 #
 # Run as a file from a clone without --version, it installs that working tree instead
@@ -19,15 +20,17 @@ PREFIX="${PREFIX:-$HOME/.local}"
 REF="main"
 REF_SET=0
 MODE="install"
+SKILL=1
 SYSTEMCTL="${PERPETUA_SYSTEMCTL:-systemctl}"
 
-usage() { sed -n '2,14p' "$0" 2>/dev/null | sed 's/^# \{0,1\}//' || true; }
+usage() { sed -n '2,15p' "$0" 2>/dev/null | sed 's/^# \{0,1\}//' || true; }
 
 while [[ $# -gt 0 ]]; do
 	case "$1" in
 		--prefix) PREFIX=${2:?--prefix needs a directory}; shift 2 ;;
 		--version) REF=${2:?--version needs a tag or branch}; REF_SET=1; shift 2 ;;
 		--uninstall) MODE="uninstall"; shift ;;
+		--no-skill) SKILL=0; shift ;;
 		-h | --help) usage; exit 0 ;;
 		*) echo "install.sh: unknown option $1 (try --help)" >&2; exit 2 ;;
 	esac
@@ -79,6 +82,18 @@ install -m 0755 "$src/bin/perpetua" "$PREFIX/bin/perpetua"
 install -m 0755 "$src/libexec/perpetua/session" "$src/libexec/perpetua/record.py" "$PREFIX/libexec/perpetua/"
 install -m 0644 "$src"/share/perpetua/systemd/* "$PREFIX/share/perpetua/systemd/"
 install -m 0644 "$src"/share/perpetua/templates/* "$PREFIX/share/perpetua/templates/"
+if [[ -d $src/share/perpetua/skills ]]; then
+	rm -rf "$PREFIX/share/perpetua/skills"
+	cp -R "$src/share/perpetua/skills" "$PREFIX/share/perpetua/skills"
+fi
+
+# The default PROMPT uses /autonomous-mode: install the bundled copy unless one exists.
+skill_dest=$HOME/.claude/skills/autonomous-mode
+if ((SKILL)) && [[ -d $PREFIX/share/perpetua/skills/autonomous-mode && ! -e $skill_dest ]]; then
+	install -d "$HOME/.claude/skills"
+	cp -R "$PREFIX/share/perpetua/skills/autonomous-mode" "$skill_dest"
+	say "autonomous-mode skill installed in $skill_dest"
+fi
 
 # Refresh already-installed units so they point at this installation.
 unit_dir=${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user

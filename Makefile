@@ -1,7 +1,7 @@
 # Perpetua build and maintenance targets.
 PREFIX  ?= $(HOME)/.local
 VERSION := $(shell sed -n 's/^readonly VERSION="\(.*\)"/\1/p' bin/perpetua)
-SHELLS  := bin/perpetua libexec/perpetua/session tests/fixtures/claude tests/fixtures/systemctl install.sh
+SHELLS  := bin/perpetua libexec/perpetua/session tests/fixtures/claude tests/fixtures/systemctl install.sh platform/vps/bootstrap.sh
 BATS    ?= npx --yes bats@1.11.0
 DIST    := dist/perpetua-$(VERSION)
 
@@ -35,7 +35,7 @@ docs-serve: ## Serve the documentation locally
 
 dist: version-check ## Build the release tarball
 	rm -rf $(DIST) && mkdir -p $(DIST)
-	cp -R bin libexec share platform install.sh LICENSE README.md CHANGELOG.md $(DIST)/
+	cp -R bin libexec share platform install.sh LICENSE NOTICE README.md README.fr.md CHANGELOG.md $(DIST)/
 	tar -C dist -czf $(DIST).tar.gz perpetua-$(VERSION)
 	rm -rf $(DIST)
 	@echo "$(DIST).tar.gz"

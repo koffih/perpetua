@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-20
+
+### Added
+
+- `platform/vps/bootstrap.sh`: turns a fresh Debian, Ubuntu or Fedora-family server into
+  a Perpetua host as root, idempotently: system packages, a dedicated account with
+  lingering, SSH access, a deploy key, a git identity, Claude Code, Perpetua, the stored
+  Claude token, and optionally a cloned, registered and enabled project. `--dry-run`
+  prints every command and never prints the token.
+- Host environment file `$XDG_CONFIG_HOME/perpetua/environment`, exported to every
+  session by the runner. It carries `CLAUDE_CODE_OAUTH_TOKEN` from `claude setup-token`
+  on servers without a browser.
+- `perpetua doctor` accepts credentials from the environment file and warns when the file
+  is readable by others.
+- The `autonomous-mode` skill is bundled in `share/perpetua/skills/` and installed into
+  `~/.claude/skills/` when absent (`install.sh --no-skill` opts out).
+- Guide: Running on a VPS.
+- `CLAUDE.md`: working brief for Claude Code sessions that develop Perpetua itself.
+
 ## [1.0.0] - 2026-10-20
 
 First public release.
@@ -140,5 +159,6 @@ First public release.
   the CLI and configuration reference, state files, the runner log, systemd, the threat
   model and the architecture decision records.
 
-[Unreleased]: https://github.com/koffih/perpetua/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/koffih/perpetua/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/koffih/perpetua/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/koffih/perpetua/releases/tag/v1.0.0

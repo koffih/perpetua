@@ -10,7 +10,7 @@
   <a href="https://koffih.github.io/perpetua/"><img alt="Documentation" src="https://img.shields.io/badge/docs-koffih.github.io%2Fperpetua-7C5CFF"></a>
   <a href="https://github.com/koffih/perpetua/releases"><img alt="Release" src="https://img.shields.io/github/v/release/koffih/perpetua?color=1FD1B9"></a>
   <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-0B0D17"></a>
-  <img alt="Platform" src="https://img.shields.io/badge/platform-Linux%20%7C%20WSL2-0B0D17">
+  <img alt="Platform" src="https://img.shields.io/badge/platform-Linux%20%7C%20VPS%20%7C%20WSL2-0B0D17">
 </p>
 
 <p align="center">
@@ -101,6 +101,8 @@ perpetua pause atlas       # stop starting new sessions; resume with: perpetua r
 
 Full walkthrough: [Quickstart](https://koffih.github.io/perpetua/getting-started/quickstart/).
 
+**On a headless VPS**, one command as root prepares a dedicated account, Claude Code, a token-based login and a deploy key: `./platform/vps/bootstrap.sh --oauth-token-file claude-token --repo git@github.com:you/atlas.git`. See [Running on a VPS](https://koffih.github.io/perpetua/guides/vps/).
+
 ## Guardrails at a glance
 
 | Gate | Closes when | Bypassed by `--force` |
@@ -119,7 +121,7 @@ Inside the session, the shipped directive forbids purchases and sign-ups, publis
 |---|---|
 | [Getting started](https://koffih.github.io/perpetua/getting-started/installation/) | Installation, first supervised session, enabling the cadence |
 | [Concepts](https://koffih.github.io/perpetua/concepts/architecture/) | Architecture, session lifecycle, guardrails |
-| [Guides](https://koffih.github.io/perpetua/guides/writing-a-directive/) | Writing a directive, day-2 operations, notifications, multiple projects, WSL |
+| [Guides](https://koffih.github.io/perpetua/guides/writing-a-directive/) | Writing a directive, day-2 operations, notifications, multiple projects, WSL, VPS |
 | [Reference](https://koffih.github.io/perpetua/reference/cli/) | CLI, configuration keys, files and state, runner log, systemd units |
 | [Security](https://koffih.github.io/perpetua/security/threat-model/) | Threat model and hardening checklist |
 | [Architecture decisions](https://koffih.github.io/perpetua/adr/) | The reasoning behind every structural choice |
@@ -133,6 +135,8 @@ libexec/perpetua/record.py       outcome recorder (Python standard library only)
 share/perpetua/systemd/          perpetua@.service and perpetua@.timer templates
 share/perpetua/templates/        project configuration and directive templates
 platform/wsl/                    Windows-side keep-alive for WSL2 hosts
+platform/vps/bootstrap.sh        fresh server to Perpetua host in one command
+share/perpetua/skills/           bundled autonomous-mode skill
 tests/                           bats suite with fake claude and systemctl
 docs/                            documentation site (Material for MkDocs)
 ```

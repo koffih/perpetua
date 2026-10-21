@@ -44,7 +44,7 @@ setup() {
 	run "$ROOT/install.sh" --prefix "$BATS_TEST_TMPDIR/prefix"
 	[ "$status" -eq 0 ]
 	run "$BATS_TEST_TMPDIR/prefix/bin/perpetua" version
-	[ "$output" = "perpetua 1.0.0" ]
+	[ "$output" = "perpetua 1.1.0" ]
 	[ -x "$BATS_TEST_TMPDIR/prefix/libexec/perpetua/session" ]
 	"$ROOT/install.sh" --prefix "$BATS_TEST_TMPDIR/prefix" --uninstall
 	[ ! -e "$BATS_TEST_TMPDIR/prefix/bin/perpetua" ]

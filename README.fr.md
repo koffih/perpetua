@@ -44,6 +44,16 @@ perpetua logs atlas
 perpetua pause atlas        # reprise : perpetua resume atlas
 ```
 
+## Sur un VPS
+
+En root, sur un serveur Debian, Ubuntu ou Fedora neuf, depuis l'archive décompressée :
+
+```bash
+./platform/vps/bootstrap.sh --oauth-token-file claude-token --repo git@github.com:vous/atlas.git
+```
+
+Le script crée un compte dédié `perpetua`, active le lingering, installe Claude Code, Perpetua et le skill `autonomous-mode`, range le jeton obtenu par `claude setup-token` dans un fichier protégé (mode 600), génère une clé SSH à déclarer comme clé de déploiement, puis clone et enregistre le projet. `--dry-run` montre tout sans rien modifier. Voir le [guide VPS](https://koffih.github.io/perpetua/guides/vps/).
+
 ## Sous WSL2
 
 Windows éteint la distribution quand aucun client WSL n'est ouvert, ce qui arrête les minuteurs. `platform/wsl/install-keepalive.ps1` installe un client invisible au démarrage de Windows. Voir le [guide WSL](https://koffih.github.io/perpetua/guides/wsl/).

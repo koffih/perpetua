@@ -8,7 +8,7 @@ setup() { setup_env; }
 	[ "$status" -eq 0 ]
 	[[ $output == *"perpetua"*"init"* ]]
 	run "$PERPETUA" version
-	[[ $output == "perpetua 1.0.0" ]]
+	[[ $output == "perpetua 1.1.0" ]]
 }
 
 @test "unknown command fails with status 2" {

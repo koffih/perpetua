@@ -244,6 +244,16 @@ The runner and the CLI read the following variables from their environment. Unde
 | `NO_COLOR` | CLI | Non-empty disables colour. |
 | `PATH` | runner | Extended as described under [`CLAUDE_BIN`](#claude_bin). |
 
+### Host environment file
+
+Before the project file, the runner sources `$XDG_CONFIG_HOME/perpetua/environment` when it exists, with every assignment exported to Claude Code. It is the place for host-wide credentials on a server without a browser, typically the token printed by `claude setup-token`:
+
+```bash
+CLAUDE_CODE_OAUTH_TOKEN=...
+```
+
+Keep it mode 600; `perpetua doctor` warns otherwise. See [Running on a VPS](../guides/vps.md).
+
 Claude Code reads its own environment variables. An `ANTHROPIC_API_KEY` present in the runner's environment reaches it and may take precedence over the subscription login (see [ADR 0003](../adr/0003-subscription-auth.md)).
 
 ## Complete example
