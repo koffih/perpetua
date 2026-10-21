@@ -82,5 +82,5 @@ attestation:
 
 ```sh
 sha256sum --check SHA256SUMS
-gh attestation verify perpetua-1.0.0.tar.gz --repo koffih/perpetua
+gh attestation verify perpetua-1.1.0.tar.gz --repo koffih/perpetua
 ```
